@@ -32,41 +32,54 @@ typedef struct Medico{
   Esp esp;
   Fun fun;	
 }Med;
+//declarando Variaaveis globais
+FILE *pe;//ponteiro arquivo Especialidade.txt
+FILE *pf;//ponteiro arquivo Funcionario.txt
+FILE *pm;//ponteiro arquivo Medico.txt
+FILE *pp;//ponteiro arquivo Paciente.txt
 
 //decrarando Procedimentos/Funcoes
 void MenuAdm();
 
 void MenuAdmEsp(Esp e[],int t);
+bool VerEsp();
 void CadEsp(Esp e[],int t);
 void AltEsp(Esp e[],int t);
 Esp PesqEsp(Esp e[],int t);
 void ExcEsp(Esp e[],int t);
 void ImpEsp(Esp e[],int t);
 void ExibEsp(Esp e);
+void ListEsp();
 
 void MenuAdmFun(Fun f[], int t);
+bool VerFun();
 void CadFun(Fun f[], int t);
 void AltFun(Fun f[], int t);
 Fun PesqFun(Fun f[], int t);
 void ExcFun(Fun f[], int t);
 void ImpFun(Fun f[], int t);
 void ExibFun(Fun f);
+void ListFun();
 
 void MenuAdmMed(Med med[], int t);
+bool VerMed();
 void CadMed(Med med[], int t);
 void AltMed(Med med[], int t);
 Med PesqMed(Med med[], int t);
 void ExcMed(Med med[], int t);
 void ImpMed(Med med[], int t);
 void ExibMed(Med med);
+void ListMed();
 
 void MenuFun(Pac p[], int t);
+bool VerPac();
 void CadPac(Pac p[], int t);
 void AltPac(Pac p[], int t);
 Pac PesqPac(Pac p[], int t);
 void ExcPac(Pac p[], int t);
 void ImpPac(Pac p[], int t);
 void ExibPac(Pac p);
+void ListPac();
 
 main(){
  Log adm;
@@ -159,7 +172,8 @@ void MenuAdmEsp(Esp e[],int t){
   printf("\n2-Alterar Especialidade");	
   printf("\n3-Pesquisar Especialidade");	
   printf("\n4-Excluir Especialidade");	
-    printf("\n5-Listar Especialidades");
+  printf("\n5-Listar Especialidades");
+  printf("\n6-Listar Arquivo");
   printf("\n0-Voltar\n");
   scanf("%i",&m);
 	switch(m){
@@ -178,6 +192,9 @@ void MenuAdmEsp(Esp e[],int t){
 		case 5:
 		  ImpEsp(e, t);
 			break;
+		case 6:
+		 ListEsp();
+			break;
 		case 0:
 		 printf("\nVoltando...\n");
 			system("pause");	
@@ -189,8 +206,20 @@ void MenuAdmEsp(Esp e[],int t){
   	system("pause");
 }//fim MenuAdmEsp
 
+bool VerEsp(){
+	pe=fopen("Especialidade.txt","a+");	
+	if(pe!=NULL){
+	return true;	
+	}else{
+	return false;	
+	}
+	
+	fclose(pe);
+}//fim VerEsp
+
 void CadEsp(Esp e[],int t){
 system("cls");
+if(VerEsp()){
 printf("Cadastrando \n");
 for(int i=0;i<t;i++){
 	printf("\nEspecialidade: %i",i+1);
@@ -200,9 +229,19 @@ for(int i=0;i<t;i++){
 	printf("\nCodigo: ");
 	scanf("%i",&e[i].codigo);
 	
+	pe=fopen("Especialidade.txt","a");
+	fwrite(&e[i],sizeof(Esp),1,pe);
+	fclose(pe);
+	
 }//fim for
 printf("\nFinalizando Cadastro\n");
 system("pause");
+}//fim comparação
+else{
+	printf("Arquivo Especialidade nao encontrado\n");
+	system("pause");
+}//fim else
+
 }//fim CadEsp
 
 Esp PesqEsp(Esp e[],int t){
@@ -328,6 +367,26 @@ system("pause");
 
 }//fim ImpEsp
 
+void ListEsp(){
+Esp esp;
+system("cls");
+		//abrir arquivo
+		pe=fopen("Especialidade.txt","r");
+		rewind(pe);//comando para localizar o ponteiro do arquivo, para inicio
+		while(!feof(pe)){
+		fread(&esp,sizeof(Esp),1,pe);	
+		if(!feof(pe)){
+	printf("\nNome: %s",esp.nome);
+	printf("\nCodigo: %i\n\n",esp.codigo);
+		printf("\n\n");
+		}
+	 }		
+		fclose(pe);
+	
+system("pause");
+
+}//fim listEsp
+
 //FIM CRUD ESPECIALIDADE
 
 //CRUD FUNCIONARIO
@@ -340,7 +399,8 @@ void MenuAdmFun(Fun f[], int t){
   printf("\n2-Alterar Funcionario");	
   printf("\n3-Pesquisar Funcionario");	
   printf("\n4-Excluir Funcionario");
-    printf("\n5-Listar Funcionarios");	
+  printf("\n5-Listar Funcionarios");	
+  printf("\n6-Listar Arquivo");	
   printf("\n0-Voltar\n");	
 	scanf("%i",&m);
 	switch(m){
@@ -359,6 +419,9 @@ void MenuAdmFun(Fun f[], int t){
         case 5:
 		ImpFun(f, t);
 			break;
+		case 6:
+		 ListFun();	
+			break;
 		case 0:
 		 printf("\nVoltando...\n");
 			system("pause");
@@ -370,8 +433,20 @@ void MenuAdmFun(Fun f[], int t){
  	system("pause");
 }//fim MenuAdmFun
 
+bool VerFun(){
+	pf=fopen("Funcionario.txt","a+");	
+	if(pf!=NULL){
+	return true;	
+	}else{
+	return false;	
+	}
+	
+	fclose(pf);
+}//fim VerFun
+
 void CadFun(Fun f[], int t){
 system("cls");
+if(VerFun()){
 printf("Cadastrando \n");
 for(int i=0;i<t;i++){
 	printf("\nFuncionario: %i",i+1);
@@ -386,8 +461,21 @@ for(int i=0;i<t;i++){
 	printf("\nSenha: ");
 	fflush(stdin);
 	gets(f[i].log.senha);	
+
+	pf=fopen("Funcionario.txt","a");
+	fwrite(&f[i],sizeof(Fun),1,pf);
+	fclose(pf);
+	
 }//fim for
 printf("\nFinalizando Cadastro\n");
+system("pause");
+}//fim comparação
+
+else{
+	printf("Arquivo Funcionario nao encontrado\n");
+	system("pause");
+}//fim else
+
 system("pause");
 }//fim CadFun
 
@@ -530,6 +618,28 @@ printf("\nFim da Lista\n");
 system("pause");
 }//fim ImpFun
 
+void ListFun(){
+Fun fun;
+system("cls");
+		//abrir arquivo
+		pf=fopen("Funcionario.txt","r");
+		rewind(pf);//comando para localizar o ponteiro do arquivo, para inicio
+		while(!feof(pf)){
+		fread(&fun,sizeof(Fun),1,pf);	
+		if(!feof(pf)){
+	printf("\nNome: %s",fun.nome);
+	printf("\nMatricula: %i",fun.mat);
+	printf("\nUsuario: %s",fun.log.user);	
+	printf("\nSenha: %s\n\n",fun.log.senha);	
+		printf("\n\n");
+		}
+	 }		
+		fclose(pf);
+	
+system("pause");
+
+}//fim listFun
+
 //FIM CRUD FUNCIONARIO
 
 //CRUD MEDICO
@@ -543,6 +653,7 @@ void MenuAdmMed(Med med[], int t){
   printf("\n3-Pesquisar Medico");	
   printf("\n4-Excluir Medico");	
   printf("\n5-Listar Medicos");
+  printf("\n6-Listar Arquivo");
   printf("\n0-Voltar\n");	
 	scanf("%i",&m);
 	switch(m){
@@ -561,6 +672,9 @@ void MenuAdmMed(Med med[], int t){
 		case 5:
 		  ImpMed(med, t);
 			break;
+		case 6:
+		  ListMed();
+		    break;
 		case 0:
 		 printf("\nVoltando...\n");
 			system("pause");	
@@ -572,8 +686,22 @@ void MenuAdmMed(Med med[], int t){
 		system("pause");
 }//fim MenuAdmMed
 
+bool VerMed(){
+	pm=fopen("Medico.txt","a+");	
+	if(pm!=NULL){
+	return true;	
+	}else{
+	return false;	
+	}
+	
+	fclose(pm);
+}//fim VerMed
+
 void CadMed(Med med[], int t){
 	system("cls");
+	
+	if(VerMed()){
+
 printf("Cadastrando \n");
 for(int i=0;i<t;i++){
 	printf("\nMedico: %i",i+1);
@@ -591,8 +719,21 @@ for(int i=0;i<t;i++){
 	printf("\nSenha: ");
 	fflush(stdin);
 	gets(med[i].fun.log.senha);	
+
+	pm=fopen("Medico.txt","a");
+	fwrite(&med[i],sizeof(Med),1,pm);
+	fclose(pm);
+	
 }//fim for
 printf("\nFinalizando Cadastro\n");
+system("pause");
+}//fim comparação
+
+else{
+	printf("Arquivo Medico nao encontrado\n");
+	system("pause");
+}//fim else
+
 system("pause");
 }//fim CadMed
 
@@ -743,6 +884,29 @@ system("pause");
 
 }//fim ImpMed
 
+void ListMed(){
+Med med;
+system("cls");
+		//abrir arquivo
+		pm=fopen("Medico.txt","r");
+		rewind(pm);//comando para localizar o ponteiro do arquivo, para inicio
+		while(!feof(pm)){
+		fread(&med,sizeof(Med),1,pm);	
+		if(!feof(pm)){
+	printf("\nNome: %s",med.fun.nome);
+	printf("\nCRM: %i",med.crm);
+	printf("\nEspecialdade: %s",med.esp.nome);
+	printf("\nUsuario: %s",med.fun.log.user);	
+	printf("\nSenha: %s\n\n",med.fun.log.senha);	
+		printf("\n\n");
+		}
+	 }		
+		fclose(pm);
+	
+system("pause");
+
+}//fim listMed
+
 //FIM CRUD MEDICO
 
 //CRUD PACIENTE
@@ -756,6 +920,7 @@ void MenuFun(Pac p[], int t){
   printf("\n3-Pesquisar Paciente");	
   printf("\n4-Excluir Paciente");	
   printf("\n5-Listar Pacientes");	
+  printf("\n6-Listar Arquivo");	
   printf("\n0-Voltar\n");	
 	
 	scanf("%i",&m);
@@ -774,7 +939,10 @@ void MenuFun(Pac p[], int t){
 			break;
 		case 5:
 		  ImpPac(p, t);
-			break;	
+			break;
+		case 6:
+		 ListPac();		
+		 	break;
 		case 0:
 		 printf("\nVoltando...\n");
 			system("pause");		
@@ -786,8 +954,22 @@ void MenuFun(Pac p[], int t){
 	system("pause");
 }//fim MenuFun
 
+bool VerPac(){
+	pp=fopen("Paciente.txt","a+");	
+	if(pp!=NULL){
+	return true;	
+	}else{
+	return false;	
+	}
+	
+	fclose(pp);
+}//fim VerPac
+
 void CadPac(Pac p[], int t){
 system("cls");
+
+if(VerPac()){
+
 printf("Cadastrando \n");
 for(int i=0;i<t;i++){
 	printf("\nPaciente: %i",i+1);
@@ -804,8 +986,22 @@ for(int i=0;i<t;i++){
 	printf("\nSenha: ");
 	fflush(stdin);
 	gets(p[i].log.senha);	
+
+
+	pm=fopen("Paciente.txt","a");
+	fwrite(&p[i],sizeof(Pac),1,pp);
+	fclose(pp);
+	
 }//fim for
 printf("\nFinalizando Cadastro\n");
+system("pause");
+}//fim comparação
+
+else{
+	printf("Arquivo Paciente nao encontrado\n");
+	system("pause");
+}//fim else
+
 system("pause");
 
 }//fim CadPac
@@ -955,4 +1151,28 @@ printf("\nFim de Lista\n");
 system("pause");
 
 }//fim ImpPac
+
+void ListPac(){
+Pac pac;
+system("cls");
+		//abrir arquivo
+		pp=fopen("Paciente.txt","r");
+		rewind(pp);//comando para localizar o ponteiro do arquivo, para inicio
+		while(!feof(pp)){
+		fread(&pac,sizeof(Pac),1,pp);	
+		if(!feof(pp)){
+	printf("\nNome: %s",pac.nome);
+	printf("\nCPF: %i",pac.cpf);
+	printf("\nTelefone: %i",pac.telefone);
+	printf("\nUsuario: %s",pac.log.user);	
+	printf("\nSenha: %s\n\n",pac.log.senha);
+		printf("\n\n");
+		}
+	 }		
+		fclose(pp);
+	
+system("pause");
+
+}//fim listPac
+
 //FIM CRUD PASCIENTE

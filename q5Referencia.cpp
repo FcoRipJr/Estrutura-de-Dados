@@ -89,12 +89,12 @@ Pessoa a;
 	 printf("\nAltura: ");
 	 scanf("%f",&a.alt);
 	 a.imc=a.peso/(a.alt*a.alt);
-strcpy(*p.nome,a.nome);
-*p.cpf=a.cpf;
-*p.nasc=a.nasc;	 
-*p.alt=a.alt;
-*p.peso=a.peso;
-*p.imc=a.imc;	
+strcpy(p->nome,a.nome);
+p->cpf=a.cpf;
+p->nasc=a.nasc;	 
+p->alt=a.alt;
+p->peso=a.peso;
+p->imc=a.imc;	
 	
 	}//fim Cadastrar
 

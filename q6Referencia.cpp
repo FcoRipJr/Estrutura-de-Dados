@@ -77,12 +77,12 @@ Carro a;
 	 printf("\nValor: ");
 	 scanf("%f",&a.valor);
 	 a.ipva=a.valor*0.03;
-strcpy(*p.cor,a.cor);
-strcpy(*p.marca,a.marca);
-strcpy(*p.modelo,a.modelo);
-strcpy(*p.placa,a.placa);
-*p.valor=a.valor;
-*p.ipva=a.ipva;
+p->valor=a.valor;
+p->ipva=a.ipva;
+strcpy(p->modelo,a.modelo);
+strcpy(p->placa,a.placa);
+strcpy(p->marca,a.marca);
+strcpy(p->cor,a.cor);
 	
 }//fim Cadastrar
 
